@@ -20,7 +20,9 @@ class LRUCache(BaseCaching):
                 self.cache_data.move_to_end(key)
             elif (len(self.cache_data) >= BaseCaching.MAX_ITEMS):
                 discarded = self.cache_data.popitem(last=False)
-                print("DISCARD: {}".format(discarded))
+                res = dict([discarded])
+                for k, v in res.items():
+                    print("DISCARD: {}".format(k))
             self.cache_data[key] = item
 
     def get(self, key):
