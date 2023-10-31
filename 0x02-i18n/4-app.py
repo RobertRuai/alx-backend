@@ -5,7 +5,7 @@ from flask_babel import Babel, localeselector
 
 
 app = Flask(__name__)
-babel = Babel(app, locale_selector=get_locale, timezone_selector=get_timezone)
+babel = Babel(app)
 
 
 class Config:
