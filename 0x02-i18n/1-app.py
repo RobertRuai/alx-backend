@@ -20,8 +20,8 @@ class Config:
 app.config.from_object(Config)
 
 
-@app.route('/', strict_slashes=False)
-def hello() -> str:
+@app.route('/', methods=["GET"], strict_slashes=False)
+def hello():
     """displays Welcome to Holberton"""
     return render_template('1-index.html')
 
