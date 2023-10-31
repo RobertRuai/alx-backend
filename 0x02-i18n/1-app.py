@@ -21,7 +21,7 @@ app.config.from_object(Config)
 
 
 @app.route('/', strict_slashes=False)
-def hello():
+def hello() -> str:
     """displays Welcome to Holberton"""
     return render_template('1-index.html')
 
