@@ -18,16 +18,17 @@ class Config:
 
     app.config.from_object(Config)
 
-    @babel.localeselector
-    def get_locale():
-        """get_locale func"""
-        return request.accept_languages.best_match(app.config['LANGUAGES'])
-
 
 @app.route('/', methods=["GET"], strict_slashes=False)
 def hello():
     """displays Welcome to Holberton"""
     return render_template('2-index.html')
+
+
+@babel.localeselector
+def get_locale():
+    """ Gets the best matching language for user """
+    return request.accept_languages.best_match(Config.LANGUAGES)
 
 
 if __name__ == "__main__":
