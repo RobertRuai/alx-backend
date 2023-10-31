@@ -22,7 +22,7 @@ class Config:
 @app.route('/', methods=["GET"], strict_slashes=False)
 def hello():
     """displays Welcome to Holberton"""
-    return render_template('2-index.html')
+    return render_template('3-index.html')
 
 
 @babel.localeselector
