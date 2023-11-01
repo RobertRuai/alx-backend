@@ -32,7 +32,7 @@ app.config.from_object(Config)
 def hello():
     """displays Welcome to Holberton"""
     return render_template(
-        '5-index.html')
+        '6-index.html')
 
 
 @babel.localeselector
@@ -42,7 +42,10 @@ def get_locale():
     if lan is not None:
         if lan in app.config['LANGUAGES']:
             return lan
-    return request.accept_languages.best_match(Config.LANGUAGES)
+        elif g.users['locale'] in app.config['LANGUAGES']:
+            return g.users['locale']
+        else:
+            return request.accept_languages.best_match(Config.LANGUAGES)
 
 
 def get_user(user_id):
