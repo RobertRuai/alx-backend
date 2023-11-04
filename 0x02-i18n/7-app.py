@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 """main app module"""
-import flask
+import pytz
+from pytz.exceptions import UnkownTimeZoneError
 from flask import Flask, g, render_template, request
-from flask_babel import Babel, _
+from flask_babel import Babel
 
 
 app = Flask(__name__)
@@ -33,34 +34,53 @@ app.config.from_object(Config)
 def hello():
     """displays Welcome to Holberton"""
     return render_template(
-        '5-index.html', user=flask.g.user)
+        '7-index.html')
 
 
 @babel.localeselector
 def get_locale():
     """ Gets the best matching language for user """
     lan = request.args.get('locale')
-    if lan and lan in app.config['LANGUAGES']:
-        return lan
-    return request.accept_languages.best_match(Config.LANGUAGES)
+    if lan is not None:
+        if lan in app.config['LANGUAGES']:
+            return lan
+        elif g.users['locale'] in app.config['LANGUAGES']:
+            return g.users['locale']
+        else:
+            return request.accept_languages.best_match(Config.LANGUAGES)
 
 
 def get_user(user_id):
     """ returns a user dictionary"""
-    try:
-        login_as = request.args.get('login_as')
+    login_as = request.args.get('login_as')
+    if login_as is not None and login_as in users:
         user_id = int(login_as)
-        user = users.get(user_id)
-        return user
-    except Exception:
-        return None
+        return users.get(user_id)
+    return None
 
 
 @app.before_request
 def before_request():
     """use get_user to find a user"""
     user_id = request.args.get('login_as')
-    flask.g.user = get_user('user_id')
+    g.user = get_user(user_id)
+
+
+@babel.timezoneselector
+def get_timezone():
+    """get a user timezone"""
+    user = getattr(g, 'users', None)
+    time = request.args.get("timezone")
+    try:
+        if pytz.timezone(time) is not None:
+            if g.user['timezone'] is not None:
+                return g.user['timezone']
+            else:
+                return request.accept_languages.best_match(
+                    Config.BABEL_DEFAULT_TIMEZONE)
+        return time
+    except UnknownTimeZoneError:
+        pass
 
 
 if __name__ == "__main__":
