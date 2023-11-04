@@ -42,10 +42,9 @@ def get_locale():
     lan = request.args.get('locale')
     if lan and lan in app.config['LANGUAGES']:
         return lan
-    elif flask.g.users['locale'] in app.config['LANGUAGES']:
+    if flask.g.users['locale'] in app.config['LANGUAGES']:
         return flask.g.users['locale']
-    else:
-        return request.accept_languages.best_match(Config.LANGUAGES)
+    return request.accept_languages.best_match(Config.LANGUAGES)
 
 
 def get_user(user_id):
