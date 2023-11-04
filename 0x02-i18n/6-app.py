@@ -42,8 +42,8 @@ def get_locale():
     lan = request.args.get('locale')
     if lan and lan in app.config['LANGUAGES']:
         return lan
-    if flask.g.users['locale'] in app.config['LANGUAGES']:
-        return flask.g.users['locale']
+    if g.users['locale'] in app.config['LANGUAGES']:
+        return g.users['locale']
     return request.accept_languages.best_match(Config.LANGUAGES)
 
 
