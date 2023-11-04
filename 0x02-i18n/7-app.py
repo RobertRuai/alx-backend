@@ -53,7 +53,7 @@ def get_locale():
 
 def get_user(user_id):
     """ returns a user dictionary"""
-     try:
+    try:
         login_as = request.args.get('login_as')
         user_id = int(login_as)
         user = users.get(user_id)
