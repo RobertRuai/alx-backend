@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """main app module"""
+import flask
 import pytz
 from pytz.exceptions import UnkownTimeZoneError
 from flask import Flask, g, render_template, request
@@ -34,7 +35,7 @@ app.config.from_object(Config)
 def hello():
     """displays Welcome to Holberton"""
     return render_template(
-        '7-index.html')
+        '7-index.html', user=flask.g.user)
 
 
 @babel.localeselector
@@ -52,18 +53,20 @@ def get_locale():
 
 def get_user(user_id):
     """ returns a user dictionary"""
-    login_as = request.args.get('login_as')
-    if login_as is not None and login_as in users:
+     try:
+        login_as = request.args.get('login_as')
         user_id = int(login_as)
-        return users.get(user_id)
-    return None
+        user = users.get(user_id)
+        return user
+    except Exception:
+        return None
 
 
 @app.before_request
 def before_request():
     """use get_user to find a user"""
     user_id = request.args.get('login_as')
-    g.user = get_user(user_id)
+    flask.g.user = get_user(user_id)
 
 
 @babel.timezoneselector
