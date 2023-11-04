@@ -40,11 +40,13 @@ def hello():
 def get_locale():
     """ Gets the best matching language for user """
     lan = request.args.get('locale')
-    if lan and lan in app.config['LANGUAGES']:
-        return lan
-    if g.users['locale'] in app.config['LANGUAGES']:
-        return g.users['locale']
-    return request.accept_languages.best_match(Config.LANGUAGES)
+    if lan:
+        if lan in app.config['LANGUAGES']:
+            return lan
+        elif g.users['locale'] in app.config['LANGUAGES']:
+            return g.users['locale']
+        else:
+            return request.accept_languages.best_match(Config.LANGUAGES)
 
 
 def get_user(user_id):
